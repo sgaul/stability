@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Stability and mobility</title>
+    <link rel="stylesheet" href="libraries/frameworks/minimal/stylesheets/styles.css">
+    <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+        <link rel=stylesheet href="libraries/widgets/nvd3/css/nv.d3.css"></link>
+<link rel=stylesheet href="libraries/widgets/nvd3/css/rNVD3.css"></link>
+<link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+    <script src="libraries/widgets/nvd3/js/jquery-1.8.2.min.js"></script>
+<script src="libraries/widgets/nvd3/js/d3.v3.min.js"></script>
+<script src="libraries/widgets/nvd3/js/nv.d3.min-new.js"></script>
+<script src="libraries/widgets/nvd3/js/fisheye.js"></script>
+
+  </head>
+  <body>
+    <div class="wrapper">
+<header>
+  <h1>Stability and mobility</h1>
+  <p>Hartford regional data and indicators</p>
+    <ol>
+    </ol>
+</header>
+
+      <section>
+        <h2>Stability indicators</h2>
+<p>This section covers indicators related to whether families and children in the region have recently moved. </p>
+
+<h2>Data and limitations</h2>
+
+<p>Data on household mobility (or stability or transience) is available through the American Community Survey. Most reports look at whether families have moved within the last five years, although some include data on whether families have moved within the last year. </p>
+
+<p>As with other ACS data, for small areas (or small subgroups), the estimates have high margins of error and are generally rolling estimates for a 5-year period. </p>
+
+<h2>What do we already know?</h2>
+
+<p>Indicators as to whether families or children have recently moved are used in the reports below. </p>
+
+<h3>Local</h3>
+
+<ul>
+<li><a href="http://courantblogs.com/cityline/wp-content/uploads/2013/04/Hartford-Neighborhood-Assessment.pdf">Hartford Neighborhood Assessments</a> report included data on whether a household had been living at the same address for less than five years as a measure of neighborhood stability. Data was drawn from the ACS. </li>
+<li><a href="http://www.cadh.org/health-equity/health-equity-index.html">Health Equity Index</a> also included whether households had moved in the last five years.<br></li>
+</ul>
+
+<h3>Other relevant efforts</h3>
+
+<ul>
+<li><a href="http://www.bostonindicators.org/">Boston Indicators Project</a> looks at the percent of households that have moved in the last five years as an indicator of &#39;Civic Vitality.&#39; Data is drawn from the ACS. </li>
+<li><a href="http://fcd-us.org/our-work/child-well-being-index-cwi">The Child Well-Being Index</a> includes the rate of children who have moved within the last year, using Census data, but from historical census tables, not the current ACS. </li>
+</ul>
+
+<h2>Sample results</h2>
+
+<p>The census asks about housing tenure and provides data on how long residents have lived in occupied housing units, be they owners or renters. The data is organized by years, with those that have moved &#39;2005 or later&#39; as the most recent category. Other groupings include from 2000 to 2004, 1990 to 1999, and by decade back to 1969. Consequently, the data on mobility is really saying whether the individual surveyed moved into their residence after 2005; it is not a general index of transience or (in)stability in a region. </p>
+
+<p>The sample results are for all towns in Hartford and Tolland Counties since it is easier to extract ACS data that way. This can be trimmed to a smaller region later though. </p>
+
+<p>The map makes clear that the more urban areas have high rates of mobility, along with some of the university centers.  </p>
+
+<p><img src="assets/fig/unnamed-chunk-1.png" alt="plot of chunk unnamed-chunk-1"> </p>
+
+<p>Since the data is drawn from the ACS, there are margins of error associated with the values, which can be large for small towns. Hartford and East Hartford have significantly higher rates of mobility - 56 percent in Hartford - while many of the smaller towns (Hebron, Union) have fewer than 20 percent of the population moving in the last 5 years. </p>
+
+<p><img src="assets/fig/unnamed-chunk-2.png" alt="plot of chunk unnamed-chunk-2"> </p>
+
+<p>The ACS data breaks out housing tenure for owners vs. renters, so we can look further at whether recent moves are primarily for owners or renters in the town. </p>
+
+<p>As seen in the housing data, towns with low home-ownership rates, like Hartford, also have high mobility for residents. </p>
+
+<p><img src="assets/fig/unnamed-chunk-3.png" alt="plot of chunk unnamed-chunk-3"> </p>
+
+<p>The ACS data can be looked at by neighborhood (for 5-year estimates); below are maps of the region again for those that have moved into their current residence since 2005 (using estimates from the ACS for 2007 - 2011). Areas of new residents are clustered, possibly along transportation routes. </p>
+
+<p><img src="assets/fig/unnamed-chunk-4.png" alt="plot of chunk unnamed-chunk-4"> </p>
+
+<p>Map for Hartford neighborhoods using HNA data. </p>
+
+      </section>
+      <footer>
+        <p>Maintained by <a href="http://github.com/">
+          Scott Gaul
+        </a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by 
+          <a href="https://github.com/orderedlist">orderedlist</a></small>
+        </p>
+      </footer>    </div>
+    <script src="libraries/frameworks/minimal/javascripts/scale.fix.js"></script>
+  </body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

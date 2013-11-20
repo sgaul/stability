@@ -1,0 +1,154 @@
+---
+title       : Stability and mobility
+subtitle    : Hartford regional data and indicators
+author      : Scott Gaul
+job         : Community Indicators Project
+framework   : minimal        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+ext_widgets : {rCharts: ["libraries/nvd3"]} 
+mode        : selfcontained # {standalone, draft}
+---
+
+## Stability indicators
+
+This section covers indicators related to whether families and children in the region have recently moved. 
+
+## Data and limitations
+
+Data on household mobility (or stability or transience) is available through the American Community Survey. Most reports look at whether families have moved within the last five years, although some include data on whether families have moved within the last year. 
+
+As with other ACS data, for small areas (or small subgroups), the estimates have high margins of error and are generally rolling estimates for a 5-year period. 
+
+## What do we already know?
+
+Indicators as to whether families or children have recently moved are used in the reports below. 
+
+### Local
+
+* [Hartford Neighborhood Assessments](http://courantblogs.com/cityline/wp-content/uploads/2013/04/Hartford-Neighborhood-Assessment.pdf) report included data on whether a household had been living at the same address for less than five years as a measure of neighborhood stability. Data was drawn from the ACS. 
+* [Health Equity Index](http://www.cadh.org/health-equity/health-equity-index.html) also included whether households had moved in the last five years.  
+
+### Other relevant efforts
+
+* [Boston Indicators Project](http://www.bostonindicators.org/) looks at the percent of households that have moved in the last five years as an indicator of 'Civic Vitality.' Data is drawn from the ACS. 
+* [The Child Well-Being Index](http://fcd-us.org/our-work/child-well-being-index-cwi) includes the rate of children who have moved within the last year, using Census data, but from historical census tables, not the current ACS. 
+
+## Sample results
+
+The census asks about housing tenure and provides data on how long residents have lived in occupied housing units, be they owners or renters. The data is organized by years, with those that have moved '2005 or later' as the most recent category. Other groupings include from 2000 to 2004, 1990 to 1999, and by decade back to 1969. Consequently, the data on mobility is really saying whether the individual surveyed moved into their residence after 2005; it is not a general index of transience or (in)stability in a region. 
+
+The sample results are for all towns in Hartford and Tolland Counties since it is easier to extract ACS data that way. This can be trimmed to a smaller region later though. 
+
+The map makes clear that the more urban areas have high rates of mobility, along with some of the university centers.  
+
+```{r echo = FALSE,warning = FALSE,message = FALSE, fig.width = 10, comment = NA, tidy = F}
+library(ggplot2)
+library(acs)
+library(maps)
+library(maptools)
+key = "ba67d3a427e1f785987b9c8bc59341bf7c8a7cc1"
+api.key.install(key)
+#hartford.towns = geo.make(state = "CT", county = c("Hartford","Tolland"), county.subdivision = "*", check = T)
+B25026 = acs.fetch(geography = hartford.towns, table.number = "B25026", col.names = "pretty")
+all = divide.acs(numerator=(B25026[,3] + B25026[,10]),
+                         denominator=B25026[,1], 
+                         method = 'proportion')
+#own = divide.acs(B25026[,3],denominator=B25026[,1],method = 'proportion')
+#rent = divide.acs(B25026[,10],denominator=B25026[,1],method = 'proportion')
+
+mobility = data.frame(town=geography(B25026)[[1]],
+                        all=as.numeric(estimate(all)),
+                        se.all=standard.error(all), 
+                        own=as.numeric(estimate(B25026[,3])),
+                        se.own=standard.error(B25026[,3]),
+                        rent=as.numeric(estimate(B25026[,10])),
+                        se.rent=standard.error(B25026[,10]))
+names(mobility) <- c("town","all","se.all","own","se.own","rent","se.rent")
+mobility$town= gsub(" town, Tolland County, Connecticut", "", mobility$town)
+mobility$town= gsub(" town, Hartford County, Connecticut", "", mobility$town)
+#Merge with data
+library(classInt)
+jenks <- classIntervals(mobility$all, n=4, style="fisher")
+choropleth=merge(CTTowns, mobility, by.x = "id", by.y="town")
+choropleth=choropleth[order(choropleth$order), ]
+choropleth$all=cut(choropleth$all, breaks=jenks$brks, include.lowest=T, dig.lab = T)
+#Make the map
+ggplot(data = choropleth, aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = all)) + 
+  scale_x_continuous(breaks = NULL) +
+  scale_y_continuous(breaks = NULL) +
+  labs(x = NULL, y = NULL) + 
+  coord_equal() +
+  geom_polygon(data = CTTowns, colour = "grey", alpha = 0.5, fill = NA) +
+  scale_fill_brewer(palette = "Purples", name = "Moved in\n2005 or later") +
+  theme_minimal()
+```
+
+Since the data is drawn from the ACS, there are margins of error associated with the values, which can be large for small towns. Hartford and East Hartford have significantly higher rates of mobility - 56 percent in Hartford - while many of the smaller towns (Hebron, Union) have fewer than 20 percent of the population moving in the last 5 years. 
+
+```{r echo = FALSE, warning = FALSE, fig.height = 9, message = FALSE}
+mobility$town <- reorder(mobility$town, mobility$all)
+library(scales)
+ggplot(data = mobility) + 
+  geom_point(aes(x = all, y = town)) + 
+  geom_segment(aes(xend = all - se.all, x = all + se.all, y = town, yend = town), 
+               colour = "grey") + 
+  labs(x = '% of population that moved into current housing since 2005', y = NULL) + 
+  scale_x_continuous(labels = percent) + 
+  theme_minimal()
+```
+
+The ACS data breaks out housing tenure for owners vs. renters, so we can look further at whether recent moves are primarily for owners or renters in the town. 
+
+As seen in the housing data, towns with low home-ownership rates, like Hartford, also have high mobility for residents. 
+
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+mobility$town <- reorder(mobility$town, -(mobility$own / (mobility$own + mobility$rent)))
+ggplot(data = melt(mobility[c(1,4,6)]), 
+       aes(x = town, y = value, group = variable, fill = variable)) + 
+  geom_area(position = 'fill') + 
+  scale_y_continuous(labels = percent) +
+  labs(x = NULL, y = 'Owners vs. renters among recent movers') +
+  scale_fill_brewer() +
+  coord_flip() + 
+  theme_minimal()
+```
+
+The ACS data can be looked at by neighborhood (for 5-year estimates); below are maps of the region again for those that have moved into their current residence since 2005 (using estimates from the ACS for 2007 - 2011). Areas of new residents are clustered, possibly along transportation routes. 
+
+```{r echo = FALSE,warning = FALSE,message = FALSE,fig.width = 10, fig.height = 10, comment = NA, tidy = F}
+#hartford.tracts = geo.make(state = "CT", county = c("Hartford","Tolland"), tract = "*", check = T)
+B25026 = acs.fetch(geography = hartford.tracts, table.number = "B25026", col.names = "pretty")
+
+mobility.tract = data.frame(tract=geography(B25026)[[1]],
+                        all=as.numeric(
+                          estimate(
+                            divide.acs(
+                              numerator=(B25026[,3] + B25026[,10]), 
+                              denominator=B25026[,1]))))
+mobility.tract$tract= gsub("Census Tract ", "", mobility.tract$tract)
+mobility.tract$tract= gsub(", Tolland County, Connecticut","", mobility.tract$tract)
+mobility.tract$tract= gsub(", Hartford County, Connecticut","", mobility.tract$tract)
+#Merge with data
+jenks <- classIntervals(mobility.tract$all, n=4, style="fisher")
+#Make map
+choropleth=merge(CTTracts, mobility.tract, by.x = "id", by.y="tract")
+choropleth=choropleth[order(choropleth$order), ]
+choropleth$all=cut(choropleth$all,breaks=jenks$brks, 
+                         include.lowest=T, dig.lab = T)
+#Make the map
+ggplot(data = choropleth, aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = all)) + 
+  scale_x_continuous(breaks = NULL) +
+  scale_y_continuous(breaks = NULL) +
+  labs(x = NULL, y = NULL) + 
+  coord_equal() +
+  geom_polygon(data = CTTowns, colour = "grey", alpha = 0.5, fill = NA) +
+  scale_fill_brewer(palette = "Purples", name = "Moved in\n2005 or later") +
+  theme_minimal()
+```
+
+Map for Hartford neighborhoods using HNA data. 
+
+

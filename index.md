@@ -36,16 +36,18 @@ Indicators as to whether families or children have recently moved are used in th
 
 ## Sample results
 
-The census asks about housing tenure and provides data on how long residents have lived in occupied housing units, be they owners or renters. The data is organized by years, with those that have moved '2005 or later' as the most recent category. Other groupings include from 2000 to 2004, 1990 to 1999, and by decade back to 1969. Consequently, the data on mobility is really saying whether the individual surveyed moved into their residence after 2005; it is not a general index of transience or (in)stability in a region. 
+The census asks about housing tenure and provides data on how long residents have lived in occupied housing units, be they owners or renters. The data is organized by years, with those that have moved '2005 or later' as the most recent category. Other groupings include from 2000 to 2004, 1990 to 1999, and by decade back to 1969. Consequently, the data on mobility is really saying whether the individual surveyed moved into their residence after 2005; it is not a general index of housing turnover or (in)stability in a region. 
 
-The sample results are for all towns in Hartford and Tolland Counties since it is easier to extract ACS data that way. This can be trimmed to a smaller region later though. 
+The sample results are for all towns in Hartford and Tolland Counties for convenience. This can be trimmed to a smaller region later though. 
 
-The map makes clear that the more urban areas have high rates of mobility, along with some of the university centers.  
+In the Hartford region, urban areas have high rates of mobility, along with some of the university centers.  
 
 ![plot of chunk unnamed-chunk-1](assets/fig/unnamed-chunk-1.png) 
 
 
-Since the data is drawn from the ACS, there are margins of error associated with the values, which can be large for small towns. Hartford and East Hartford have significantly higher rates of mobility - 56 percent in Hartford - while many of the smaller towns (Hebron, Union) have fewer than 20 percent of the population moving in the last 5 years. 
+Since the data is drawn from the ACS, there are margins of error associated with the values, which can be large for small towns. 
+
+Hartford and East Hartford have significantly higher rates of mobility - 56 percent in Hartford - while many of the smaller towns (Hebron, Union) have fewer than 20 percent of the population moving in the last 5 years. 
 
 ![plot of chunk unnamed-chunk-2](assets/fig/unnamed-chunk-2.png) 
 
@@ -62,6 +64,6 @@ The ACS data can be looked at by neighborhood (for 5-year estimates); below are 
 ![plot of chunk unnamed-chunk-4](assets/fig/unnamed-chunk-4.png) 
 
 
-Map for Hartford neighborhoods using HNA data. 
+ 
 
 
